@@ -1,6 +1,6 @@
 # DTM: Hệ thống Đánh giá Tác động Chính sách Môi trường
 
-DTM (Decision-making Tool for Environmental Policy Impact) là hệ thống phần mềm hỗ trợ lượng hóa bán định lượng tác động chính sách môi trường từ văn bản quy phạm pháp luật. Hệ thống kết hợp giữa xử lý ngôn ngữ tự nhiên tự động bằng Mô hình ngôn ngữ lớn (Google Gemini) và cơ chế rà soát có con người kiểm chứng (Human-in-the-loop) để đảm bảo độ tin cậy khoa học cao nhất.
+DTM là hệ thống phần mềm hỗ trợ lượng hóa bán định lượng tác động chính sách môi trường từ văn bản quy phạm pháp luật. Hệ thống kết hợp giữa xử lý ngôn ngữ tự nhiên tự động bằng Mô hình ngôn ngữ lớn (Google Gemini) và cơ chế rà soát có con người kiểm chứng (Human-in-the-loop) để đảm bảo độ tin cậy khoa học cao nhất.
 
 Hệ thống được áp dụng thực nghiệm trên **Luật Bảo vệ môi trường năm 2020** với $581$ bản ghi pháp lý độc lập.
 
