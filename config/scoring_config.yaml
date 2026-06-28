@@ -1,0 +1,100 @@
+# =============================================================
+# scoring_config.yaml — Cấu hình tính Impact Score
+# Dự án: DTM — Đánh giá tác động chính sách môi trường - Khung định lương chi phí, lợi ích, rủi ro
+# Pipeline: Tính Impact Score (Bài toán 3)
+# =============================================================
+# Công thức:
+#   C_i       = alpha*M_i + beta*S_i + gamma*D_i + delta*R_i
+#   C_i_norm  = (C_i - score_min) / (score_max - score_min)
+#   ImpactScore_i = direction_i * W_i * C_i_norm
+#
+# Trong đó:
+#   M_i: Magnitude    — Cường độ của tác động (1–5)
+#   S_i: Scope        — phạm vi ảnh hưởng (1–5)
+#   D_i: Duration     — thời gian tác động (1–5)
+#   R_i: Risk/Reversibility — mức độ rủi ro/khả năng phục hồi (1–5)
+#   W_i: Object weight — trọng số đối tượng/domain (mặc định = 1.0)
+#   direction_i: +1 (lợi ích) hoặc -1 (chi phí/ràng buộc)
+#
+# NGUỒN GỐC PHƯƠNG PHÁP:
+#   Công thức tổng hợp tương tự Environmental Impact Assessment (EIA)
+#   matrix của Leopold et al. (1971) và các phương pháp CBA trong RIA.
+#   Xem docs/scoring_rubric_MSDR.md và docs/literature_justification.md
+# =============================================================
+
+# --- Thang điểm cho M, S, D, R ---
+score_range:
+  min: 1 # Điểm thấp nhất: tác động rất nhỏ / không đáng kể
+  max: 5 # Điểm cao nhất: tác động rất lớn / nghiêm trọng
+
+# --- Trọng số (phiên bản cơ sở — equal weights) ---
+# Điều kiện bắt buộc: alpha + beta + gamma + delta = 1.0
+# Phiên bản hiện tại: equal weighting (không thiên vị chiều nào)
+# Có thể điều chỉnh trong sensitivity analysis (xem docs/methodology.md)
+weights:
+  alpha: 0.25 # Trọng số cho Magnitude (M_i)
+  beta: 0.25 # Trọng số cho Scope (S_i)
+  gamma: 0.25 # Trọng số cho Duration (D_i)
+  delta: 0.25 # Trọng số cho Risk/Reversibility (R_i)
+
+# --- Trọng số đối tượng/domain (W_i) ---
+# Mặc định W_i = 1.0 khi chưa có cơ sở chuyên gia xác định
+# Trong phiên bản tương lai, có thể dùng AHP để tính W_i theo domain
+default_W_i: 1.0
+
+# --- Công thức normalize ---
+# Mục đích: đưa C_i từ [1, 5] về [0, 1] trước khi nhân direction và W_i
+# Kết quả: ImpactScore_i ∈ [-1.0, +1.0]
+normalize:
+  formula: "(C_i - score_min) / (score_max - score_min)"
+  # Với score_min=1, score_max=5:
+  #   C_i = 1.0 → C_i_norm = 0.0  (tác động nhỏ nhất)
+  #   C_i = 3.0 → C_i_norm = 0.5  (tác động trung bình)
+  #   C_i = 5.0 → C_i_norm = 1.0  (tác động lớn nhất)
+
+# --- Kết quả ImpactScore ---
+# ImpactScore_i = direction_i (s_i) * W_i * C_i_norm
+# Khoảng giá trị: [-1.0, +1.0]
+#   > 0: tác động có lợi cho môi trường
+#   < 0: tác động có hại cho môi trường
+#   = 0: không có tác động (không thuộc D_env, không được tính)
+impact_score_range:
+  min: -1.0 # Tác động tiêu cực tối đa
+  max: 1.0 # Tác động tích cực tối đa
+
+# --- Phân nhóm mức độ Impact Score ---
+# Dùng cho báo cáo và visualization
+severity_levels:
+  high_positive:
+    range: [0.7, 1.0]
+    label: "Lợi ích cao"
+    color: "#27ae60"
+  moderate_positive:
+    range: [0.3, 0.7]
+    label: "Lợi ích trung bình"
+    color: "#82e0aa"
+  low_positive:
+    range: [0.0, 0.3]
+    label: "Lợi ích thấp"
+    color: "#d5f5e3"
+  low_negative:
+    range: [-0.3, 0.0]
+    label: "Chi phí thấp"
+    color: "#fadbd8"
+  moderate_negative:
+    range: [-0.7, -0.3]
+    label: "Chi phí trung bình"
+    color: "#f1948a"
+  high_negative:
+    range: [-1.0, -0.7]
+    label: "Chi phí/Ràng buộc cao"
+    color: "#c0392b"
+
+# --- Cảnh báo ---
+# Impact Score là bán định lượng (semi-quantitative), KHÔNG phải
+# CBA tiền tệ đầy đủ (full monetary Cost-Benefit Analysis).
+# Không nên so sánh trực tiếp với giá trị tiền tệ.
+notes:
+  type: "Semi-quantitative Environmental Impact Score"
+  not_monetary_cba: true
+  requires_human_review_of_final_label: true

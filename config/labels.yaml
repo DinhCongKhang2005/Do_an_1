@@ -1,0 +1,57 @@
+# =============================================================
+# labels.yaml — Định nghĩa nhãn phân loại tác động
+# Dự án: DTM — Đánh giá tác động chính sách môi trường - Khung định lương chi phí, lợi ích, rủi ro
+# Pipeline: Phân loại 5 nhãn (Bài toán 2)
+# =============================================================
+# Lý do dùng file này thay vì hard-code trong script:
+#   - Single Source of Truth: sửa 1 chỗ, áp dụng toàn pipeline
+#   - Dễ kiểm tra tính nhất quán giữa các script
+#   - Dễ mở rộng khi cần thêm nhãn trong phiên bản sau
+# =============================================================
+
+# --- 5 nhãn tác động ---
+# Viết tắt → Tên đầy đủ (dùng trong output LLM và báo cáo)
+labels:
+  BQ: BENEFIT_QUANTITATIVE # Lợi ích định lượng: có thể đo bằng số cụ thể
+  BQL: BENEFIT_QUALITATIVE # Lợi ích định tính: cải thiện nhưng không đo bằng số được
+  CQ: COST_QUANTITATIVE # Chi phí định lượng: có con số ràng buộc cụ thể
+  CQL: COST_QUALITATIVE # Chi phí định tính: gánh nặng tuân thủ không đo bằng số được
+  CON: CONSTRAINT # Ràng buộc: quy định hành vi, cấm/bắt buộc, không có lợi ích rõ ràng
+
+# Danh sách nhãn hợp lệ (dùng để validate output LLM)
+valid_labels:
+  - BENEFIT_QUANTITATIVE
+  - BENEFIT_QUALITATIVE
+  - COST_QUANTITATIVE
+  - COST_QUALITATIVE
+  - CONSTRAINT
+
+# --- Hướng tác động (direction - s_i) ---
+# +1: tác động tích cực (lợi ích) → ImpactScore dương
+# -1: tác động tiêu cực (chi phí/ràng buộc) → ImpactScore âm
+# Nguồn gốc logic: RIA (Regulatory Impact Assessment) phân loại
+#   tác động thành benefit và cost để tính CBA
+impact_direction:
+  BENEFIT_QUANTITATIVE: +1
+  BENEFIT_QUALITATIVE: +1
+  COST_QUANTITATIVE: -1
+  COST_QUALITATIVE: -1
+  CONSTRAINT: -1
+
+# --- Nhóm nhãn theo hướng ---
+positive_labels:
+  - BENEFIT_QUANTITATIVE
+  - BENEFIT_QUALITATIVE
+
+negative_labels:
+  - COST_QUANTITATIVE
+  - COST_QUALITATIVE
+  - CONSTRAINT
+
+# --- Màu sắc cho visualization (matplotlib) ---
+label_colors:
+  BENEFIT_QUANTITATIVE: "#2ecc71" # xanh lá đậm
+  BENEFIT_QUALITATIVE: "#82e0aa" # xanh lá nhạt
+  COST_QUANTITATIVE: "#e74c3c" # đỏ đậm
+  COST_QUALITATIVE: "#f1948a" # đỏ nhạt
+  CONSTRAINT: "#e67e22" # cam

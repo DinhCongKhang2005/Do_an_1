@@ -1,0 +1,3 @@
+# Thư mục raw data
+# Đặt file JSON pháp lý vào đây.
+# Cấu hình tên file tại: config/project_config.yaml → input.raw_json_file

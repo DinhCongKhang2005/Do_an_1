@@ -1,0 +1,262 @@
+﻿# ============================================================
+# config/project_config.yaml
+# Cấu hình dự án DTM — Pipeline 2 tầng (Cập nhật lần 2)
+# Tác giả: Đinh Công Khang — MI3380 Đồ án 1
+# ============================================================
+
+project:
+  name: "DTM Environmental Policy Impact Assessment "
+  name_vi: "Đánh giá tác động chính sách môi trường — Khung định lượng chi phí, lợi ích, rủi ro"
+  version: "3.0.0" # Cập nhật lần 2: pipeline 2 tầng env_filter + 5-label
+  author: "Đinh Công Khang"
+  institution: "MI3380 — Đồ án 1, Toán ứng dụng"
+
+# ─── Đường dẫn dữ liệu (tương đối so với project root) ───────────────────────
+paths:
+  raw_data: "data/raw/"
+  interim_data: "data/interim/"
+  processed_data: "data/processed/"
+  reports: "data/reports/"
+  figures: "outputs/figures/"
+  logs: "outputs/logs/"
+  prompts: "prompts/"
+
+# ─── File đầu vào chính ───────────────────────────────────────────────────────
+input:
+  # File JSON pháp lý chính (đặt trong data/raw/)
+  raw_json_file: "Luat_bao_ve_moi_truong_2020.json"
+  # Trường boolean xác định điều khoản có tác động chính sách
+  impact_flag_fields:
+    - "co_tac_dong"
+    - "impact"
+  # Trường văn bản chính để gửi cho LLM phân loại
+  text_field: "raw_text"
+
+# ─── Mapping tên trường (alias từ schema JSON thực tế → tên chuẩn README) ────
+# Dùng để script validate và normalize không phụ thuộc vào tên trường cụ thể
+field_aliases:
+  source_id: "source_id" # khớp trực tiếp
+  raw_text: "raw_text" # khớp trực tiếp (thay noi_dung_dieu_khoan)
+  legal_citation: "legal_citation" # khớp trực tiếp
+  co_tac_dong: "co_tac_dong" # khớp trực tiếp
+  chu_the: "chu_the" # khớp trực tiếp
+  domain: "domain" # khớp trực tiếp (lưu ý: giá trị = general_environment)
+  tin_hieu_tac_dong: "tin_hieu_tac_dong" # khớp trực tiếp (thay tin_hieu_phap_ly)
+  gia_tri_dinh_luong: "gia_tri_dinh_luong" # khớp trực tiếp
+  dieu_kien_ap_dung: "dieu_kien_ap_dung" # khớp trực tiếp (thay dieu_kien)
+  muc_do_ro_rang: "muc_do_ro_rang" # khớp trực tiếp
+  ly_do: "ly_do" # khớp trực tiếp
+
+# ─── File đầu ra trung gian ───────────────────────────────────────────────────
+interim_files:
+  # Tầng 1 — Env filtering
+  env_manual_label_template: "env_manual_label_template.xlsx"
+  env_human_labeled_dataset: "env_human_labeled_dataset.xlsx"
+  env_llm_labeled_dataset: "env_llm_labeled_dataset.xlsx"
+  env_review_dataset: "env_review_dataset.xlsx"
+  environmental_impact_records_final: "environmental_impact_records_final.xlsx"
+  # Tầng 2 — 5-label classification
+  class_manual_label_template: "class_manual_label_template.xlsx"
+  class_human_labeled_dataset: "class_human_labeled_dataset.xlsx"
+  class_llm_labeled_dataset: "class_llm_labeled_dataset.xlsx"
+  class_review_dataset: "class_review_dataset.xlsx"
+  # Chuẩn hóa actor/domain trước bước chấm điểm
+  actor_domain_review_template: "actor_domain_review_template.xlsx"
+  # Tính điểm
+  scoring_input: "scoring_input.xlsx"
+
+# ─── File đầu ra theo từng bước pipeline ─────────────────────────────────────
+pipeline_outputs:
+  # Bước 1
+  input_schema_report: "input_schema_report.xlsx" # data/reports/
+  # Bước 2
+  #Bước này không cần vì đầu vào là toàn bộ bản ghi có tác động chính sách ,legal_impact_records: "legal_impact_records.xlsx"    # data/interim/
+  # Bước 3
+  environmental_impact_records: "environmental_impact_records.xlsx" # data/interim/
+
+# ─── File đầu ra xử lý ────────────────────────────────────────────────────────
+processed_files:
+  env_final_dataset: "env_final_dataset.xlsx" # Sau tầng 1: D_env
+  final_labeled_dataset: "final_labeled_dataset.xlsx" # Sau tầng 2: final_label
+  actor_domain_dataset: "actor_domain_dataset.xlsx" # Sau chuẩn hóa actor/domain
+  scored_dataset: "scored_dataset.xlsx" # Sau tính điểm
+
+# ─── File báo cáo ─────────────────────────────────────────────────────────────
+report_files:
+  input_schema_report: "input_schema_report.xlsx"
+  # Tầng 1
+  env_filter_metrics: "env_filter_metrics.xlsx"
+  env_error_analysis: "env_error_analysis.xlsx"
+  # Tầng 2
+  classification_metrics: "classification_metrics.xlsx"
+  class_error_analysis: "class_error_analysis.xlsx"
+  # Tổng hợp
+  scoring_summary: "scoring_summary.xlsx"
+  final_impact_report: "final_impact_report.xlsx"
+  pipeline_summary_report: "pipeline_summary_report.xlsx"
+  actor_domain_validation_report: "actor_domain_validation_report.xlsx"
+  scoring_validation_report: "scoring_validation_report.xlsx"
+
+# ─── File hình ảnh ────────────────────────────────────────────────────────────
+figure_files:
+  # Tầng 1 — Env filter
+  data_funnel: "data_funnel.png"
+  env_confusion_matrix: "env_confusion_matrix.png"
+  env_metric_summary: "env_metric_summary.png"
+  # Tầng 2 — Classification
+  label_distribution: "label_distribution.png"
+  classification_metric_by_label: "classification_metric_by_label.png"
+  confusion_matrix: "confusion_matrix.png"
+  normalized_confusion_matrix: "normalized_confusion_matrix.png"
+  top_error_pairs: "top_error_pairs.png"
+  # Impact Score
+  impact_score_histogram: "impact_score_histogram.png"
+  impact_score_by_label: "impact_score_by_label.png"
+  impact_score_by_domain: "impact_score_by_domain.png"
+  impact_score_by_actor: "impact_score_by_actor.png"
+  impact_score_by_impact_signal: "impact_score_by_impact_signal.png"
+  score_component_distribution: "score_component_distribution.png"
+
+# ─── Nhãn phân loại 5 lớp ────────────────────────────────────────────────────
+labels:
+  valid_labels:
+    - "BENEFIT_QUANTITATIVE"
+    - "BENEFIT_QUALITATIVE"
+    - "COST_QUANTITATIVE"
+    - "COST_QUALITATIVE"
+    - "CONSTRAINT"
+  # Hướng tác động: +1 = lợi ích, -1 = chi phí/ràng buộc
+  direction (s_i):
+    BENEFIT_QUANTITATIVE: 1
+    BENEFIT_QUALITATIVE: 1
+    COST_QUANTITATIVE: -1
+    COST_QUALITATIVE: -1
+    CONSTRAINT: -1
+
+# ─── Cấu hình Metrics ────────────────────────────────────────────────────────
+metrics:
+  zero_division: 0
+  average: "macro"
+  # Thứ tự nhãn trong Confusion Matrix (5x5)
+  confusion_matrix_order:
+    - "BENEFIT_QUANTITATIVE"
+    - "BENEFIT_QUALITATIVE"
+    - "COST_QUANTITATIVE"
+    - "COST_QUALITATIVE"
+    - "CONSTRAINT"
+
+# ─── Công thức tính điểm ─────────────────────────────────────────────────────
+scoring:
+  alpha: 0.25 # Trọng số Magnitude (M_i)
+  beta: 0.25 # Trọng số Scope (S_i)
+  gamma: 0.25 # Trọng số Duration (D_i)
+  delta: 0.25 # Trọng số Risk/Reversibility (R_i)
+  # Thang điểm Likert
+  scale_min: 1
+  scale_max: 5
+  # Trọng số đối tượng mặc định (W_i)
+  default_object_weight: 1.0
+
+# ─── Cấu hình LLM ────────────────────────────────────────────────────────────
+llm:
+  model: "gemini-3.5-flash"
+  temperature: 0.0
+  delay_seconds: 0.5
+  provider: "vertex_ai_express"
+  # Hai prompt riêng cho 2 bài toán khác nhau
+  prompt_env_filter: "prompts/env_filter_system_prompt.txt"
+  prompt_classify_5: "prompts/classify_5_labels_system_prompt.txt"
+
+# ─── Từ khóa môi trường để lọc (Bước 3 — Lọc tác động môi trường) ────────────
+# Dùng để lọc semantic trên raw_text và tin_hieu_tac_dong
+environment_keywords:
+  # Môi trường trực tiếp
+  - "môi trường"
+  - "bảo vệ môi trường"
+  - "ô nhiễm"
+  - "chất thải"
+  - "nước thải"
+  - "khí thải"
+  - "phát thải"
+  - "khí nhà kính"
+  - "carbon"
+  - "co2"
+  - "tín chỉ carbon"
+  - "biến đổi khí hậu"
+  - "khí hậu"
+  - "net zero"
+  # Phân loại môi trường
+  - "không khí"
+  - "tiếng ồn"
+  - "bức xạ"
+  - "đất"
+  - "nước ngầm"
+  - "nước mặt"
+  - "đa dạng sinh học"
+  - "hệ sinh thái"
+  # Quản lý chất thải
+  - "chất thải rắn"
+  - "chất thải nguy hại"
+  - "chôn lấp"
+  - "xử lý chất thải"
+  - "tái chế"
+  # Năng lượng tái tạo
+  - "năng lượng tái tạo"
+  - "điện mặt trời"
+  - "điện gió"
+  - "điện sạch"
+  - "tiết kiệm năng lượng"
+  - "hiệu suất năng lượng"
+  # Đánh giá tác động
+  - "đánh giá tác động môi trường"
+  - "báo cáo môi trường"
+  - "kiểm kê phát thải"
+  - "quan trắc môi trường"
+  - "quy chuẩn kỹ thuật môi trường"
+  - "tiêu chuẩn môi trường"
+  # Tín hiệu domain từ tin_hieu_tac_dong
+  - "pollution_control"
+  - "environmental_finance"
+  - "hazardous_substances"
+  - "technical_standard_threshold"
+  - "water"
+  - "air_noise_radiation"
+  - "waste"
+  - "climate"
+  - "biodiversity"
+  - "land"
+  - "groundwater"
+
+# ─── Cấu hình pipeline 2 tầng ────────────────────────────────────────────────
+# Tên cột được dùng trong từng tầng — scripts đọc từ đây, không hard-code
+
+# Tầng 1: Lọc tác động môi trường (binary classification)
+env_filter:
+  human_label_column: "env_human" # Nhãn do người nghiên cứu gán
+  llm_label_column: "env_llm" # Nhãn do LLM dự đoán
+  final_label_column: "env_final" # Nhãn chốt sau adjudication
+  human_reason_column: "env_human_reason"
+  llm_reason_column: "env_llm_reason"
+  llm_evidence_column: "env_evidence_span"
+  llm_confidence_column: "env_confidence"
+  needs_review_column: "env_needs_human_review"
+
+# Tầng 2: Phân loại 5 nhãn tác động (multi-class single-label)
+classification:
+  human_label_column: "class_human" # Nhãn do người nghiên cứu gán
+  llm_label_column: "class_llm" # Nhãn do LLM dự đoán
+  final_label_column: "final_label" # Nhãn chốt sau adjudication
+  human_reason_column: "class_human_reason"
+  llm_reason_column: "class_llm_reason"
+  llm_evidence_column: "class_evidence_span"
+  llm_confidence_column: "class_confidence"
+  needs_review_column: "class_needs_human_review"
+  rule_applied_column: "rule_applied"
+  quantity_column: "quantity_interpretation"
+
+# Cấu hình tính metric (dùng chung cho cả 2 tầng)
+metric_config:
+  zero_division: 0 # Tránh lỗi chia cho 0 khi nhãn không có dự đoán
+  average: "macro" # Macro-average: trọng số đều cho mọi nhãn (phù hợp khi lớp không cân bằng)
+  report_digits: 4 # Số chữ số thập phân trong báo cáo
+

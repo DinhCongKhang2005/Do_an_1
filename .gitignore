@@ -1,0 +1,29 @@
+# Python cache and byte-code
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+secrets/
+
+# User-specific reports or temp files
+docs/temp_*.md
+*.log

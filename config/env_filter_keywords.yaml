@@ -1,0 +1,181 @@
+# =============================================================
+# env_filter_keywords.yaml — Từ khóa phân loại domain môi trường
+# Dự án: DTM — Đánh giá tác động chính sách môi trường: khung định lượng chi phí, lợi ích, rủi ro
+# Pipeline: Tầng 1 — Lọc tác động môi trường (Bài toán 1)
+# =============================================================
+# MỤC ĐÍCH:
+#   Cung cấp danh sách từ khóa theo domain môi trường để:
+#   1. Script 02 highlight keyword giúp người gán env_human nhanh hơn
+#   2. Phân loại domain cho visualization (impact_score_by_domain.png)
+#   3. Error analysis: bản ghi nào thiếu keyword nhưng LLM vẫn gán env=1?
+#
+# LƯU Ý QUAN TRỌNG:
+#   Keyword chỉ là công cụ HỖ TRỢ, KHÔNG thay thế human label.
+#   Một bản ghi CÓ keyword không đồng nghĩa với env_human = 1.
+#   Một bản ghi KHÔNG có keyword vẫn có thể env_human = 1 nếu ngữ nghĩa
+#   của điều khoản pháp luật ảnh hưởng đến môi trường.
+#
+# NGUỒN: Phân loại domain dựa trên cấu trúc Luật BVMT 2020 (58/2020/QH14)
+#         và Thông tư hướng dẫn của Bộ TN&MT.
+# =============================================================
+
+environment_domains:
+  # --- Tài nguyên nước và nước thải ---
+  water:
+    keywords:
+      - nước thải
+      - nước mặt
+      - nước ngầm
+      - nước biển
+      - tài nguyên nước
+      - nguồn nước
+      - xả thải
+      - xả nước thải
+      - ô nhiễm nước
+      - chất lượng nước
+      - lưu vực sông
+      - hồ chứa
+    description: "Tác động đến tài nguyên nước, xả thải, chất lượng nước mặt/ngầm"
+
+  # --- Chất thải rắn và chất thải nguy hại ---
+  waste:
+    keywords:
+      - chất thải
+      - chất thải rắn
+      - chất thải nguy hại
+      - rác thải
+      - thu gom
+      - vận chuyển
+      - xử lý
+      - tiêu hủy
+      - tái chế
+      - tái sử dụng
+      - chôn lấp
+      - đốt
+      - phế liệu
+    description: "Tác động đến quản lý chất thải rắn và chất thải nguy hại"
+
+  # --- Không khí và tiếng ồn ---
+  air:
+    keywords:
+      - khí thải
+      - khí độc
+      - bụi
+      - không khí
+      - tiếng ồn
+      - độ rung
+      - phát thải
+      - ô nhiễm không khí
+      - chất ô nhiễm
+      - nồng độ
+      - ống khói
+    description: "Tác động đến chất lượng không khí, tiếng ồn, rung động"
+
+  # --- Biến đổi khí hậu và tầng ozone ---
+  climate:
+    keywords:
+      - khí nhà kính
+      - biến đổi khí hậu
+      - tầng ô-dôn
+      - ozone
+      - phát thải khí nhà kính
+      - carbon
+      - CO2
+      - metan
+      - nóng lên toàn cầu
+      - thích ứng biến đổi khí hậu
+      - giảm nhẹ biến đổi khí hậu
+    description: "Tác động đến khí hậu, phát thải khí nhà kính, tầng ozone"
+
+  # --- Đánh giá tác động môi trường và giấy phép ---
+  eia_permit:
+    keywords:
+      - đánh giá tác động môi trường
+      - ĐTM
+      - giấy phép môi trường
+      - đăng ký môi trường
+      - đánh giá sơ bộ tác động môi trường
+      - giấy xác nhận
+      - phê duyệt
+      - thẩm định
+      - môi trường chiến lược
+      - ĐMC
+    description: "Tác động liên quan đến thủ tục ĐTM, giấy phép môi trường"
+
+  # --- Quan trắc và giám sát môi trường ---
+  monitoring:
+    keywords:
+      - quan trắc
+      - giám sát
+      - báo cáo môi trường
+      - kiểm tra
+      - thanh tra
+      - cơ sở dữ liệu môi trường
+      - thông tin môi trường
+      - công khai thông tin
+    description: "Tác động đến hệ thống quan trắc, giám sát, báo cáo môi trường"
+
+  # --- Kiểm soát ô nhiễm ---
+  pollution_control:
+    keywords:
+      - ô nhiễm
+      - kiểm soát ô nhiễm
+      - xử lý ô nhiễm
+      - khắc phục ô nhiễm
+      - phòng ngừa ô nhiễm
+      - sự cố môi trường
+      - ứng phó sự cố
+    description: "Tác động đến kiểm soát và phòng ngừa ô nhiễm"
+
+  # --- Đa dạng sinh học và hệ sinh thái ---
+  biodiversity:
+    keywords:
+      - đa dạng sinh học
+      - hệ sinh thái
+      - rừng
+      - đất ngập nước
+      - san hô
+      - thực vật
+      - động vật hoang dã
+      - loài quý hiếm
+      - khu bảo tồn
+      - vùng đệm
+    description: "Tác động đến đa dạng sinh học, hệ sinh thái, tài nguyên sinh vật"
+
+  # --- Tài chính môi trường và phí ---
+  environmental_finance:
+    keywords:
+      - phí bảo vệ môi trường
+      - quỹ bảo vệ môi trường
+      - ký quỹ
+      - bồi thường thiệt hại
+      - thuế tài nguyên
+      - phí khai thác
+      - tài chính xanh
+    description: "Tác động đến các công cụ kinh tế và tài chính môi trường"
+
+  # --- Quy hoạch và quản lý nhà nước ---
+  planning_state_management:
+    keywords:
+      - quy hoạch bảo vệ môi trường
+      - chiến lược bảo vệ môi trường
+      - quản lý nhà nước
+      - trách nhiệm
+      - nghĩa vụ
+      - quyền hạn
+      - phân công
+      - phân cấp
+    description: "Tác động đến quy hoạch, quản lý nhà nước về môi trường"
+
+# --- Danh sách domain hợp lệ (dùng để validate) ---
+valid_domains:
+  - water
+  - waste
+  - air
+  - climate
+  - eia_permit
+  - monitoring
+  - pollution_control
+  - biodiversity
+  - environmental_finance
+  - planning_state_management

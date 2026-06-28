@@ -1,0 +1,125 @@
+﻿# ============================================================
+# actor_domain_config.yaml
+# Danh mục chuẩn hóa actor/domain trước bước chấm điểm Impact Score
+# ============================================================
+
+actor_groups:
+  BUSINESS_FACILITY:
+    label_vi: "Doanh nghiệp / Cơ sở sản xuất, kinh doanh, dịch vụ"
+    suggested_S_range: [2, 4]
+    keywords: ["doanh nghiệp", "cơ sở sản xuất", "cơ sở kinh doanh", "cơ sở dịch vụ", "khu sản xuất", "khu công nghiệp", "cụm công nghiệp", "chủ nguồn thải", "đơn vị xử lý chất thải", "đơn vị thu gom", "đơn vị vận chuyển"]
+  PROJECT_OWNER_INFRASTRUCTURE:
+    label_vi: "Chủ dự án đầu tư / Chủ đầu tư hạ tầng"
+    suggested_S_range: [2, 4]
+    keywords: ["chủ dự án đầu tư", "chủ đầu tư", "nhà đầu tư", "dự án đầu tư", "ban quản lý dự án", "chủ đầu tư xây dựng và kinh doanh hạ tầng"]
+  STATE_AGENCY:
+    label_vi: "Cơ quan nhà nước"
+    suggested_S_range: [3, 5]
+    keywords: ["chính phủ", "thủ tướng", "bộ tài nguyên và môi trường", "bộ", "ủy ban nhân dân", "ubnd", "cơ quan quản lý nhà nước", "cơ quan cấp phép", "cơ quan thẩm định"]
+  GENERAL_ORGANIZATION_INDIVIDUAL:
+    label_vi: "Tổ chức, cá nhân chung"
+    suggested_S_range: [3, 5]
+    keywords: ["tổ chức, cá nhân", "cơ quan, tổ chức, cá nhân", "hộ gia đình, cá nhân", "cá nhân"]
+  COMMUNITY_CRAFT_VILLAGE:
+    label_vi: "Cộng đồng dân cư / Làng nghề"
+    suggested_S_range: [2, 3]
+    keywords: ["cộng đồng dân cư", "khu dân cư", "làng nghề", "hộ sản xuất trong làng nghề"]
+
+actor_priority:
+  - STATE_AGENCY
+  - PROJECT_OWNER_INFRASTRUCTURE
+  - BUSINESS_FACILITY
+  - COMMUNITY_CRAFT_VILLAGE
+  - GENERAL_ORGANIZATION_INDIVIDUAL
+
+domains:
+  waste:
+    group: POLLUTION_WASTE_CONTROL
+    label_vi: "Chất thải nói chung"
+    suggested_R_range: [3, 4]
+    keywords: ["chất thải", "rác thải", "phế liệu", "tái chế", "tái sử dụng", "thu gom", "xử lý chất thải"]
+  water:
+    group: POLLUTION_WASTE_CONTROL
+    label_vi: "Môi trường nước"
+    suggested_R_range: [3, 4]
+    keywords: ["nước thải", "nước mặt", "nước dưới đất", "nước biển", "nguồn nước", "lưu vực", "khả năng chịu tải"]
+  air_noise_radiation:
+    group: POLLUTION_WASTE_CONTROL
+    label_vi: "Không khí, tiếng ồn, độ rung, bức xạ"
+    suggested_R_range: [3, 4]
+    keywords: ["khí thải", "bụi", "không khí", "tiếng ồn", "độ rung", "mùi", "bức xạ", "phóng xạ"]
+  hazardous_substances:
+    group: POLLUTION_WASTE_CONTROL
+    label_vi: "Chất thải nguy hại/chất độc hại"
+    suggested_R_range: [4, 5]
+    keywords: ["chất thải nguy hại", "hóa chất độc hại", "chất phóng xạ", "chất độc", "độc hại", "nguy hại"]
+  pollution_control_remediation:
+    group: POLLUTION_WASTE_CONTROL
+    label_vi: "Kiểm soát và xử lý ô nhiễm"
+    suggested_R_range: [3, 5]
+    keywords: ["ô nhiễm", "khắc phục", "xử lý ô nhiễm", "sự cố môi trường", "phục hồi môi trường", "kiểm soát nguồn thải"]
+  eia_permit_registration:
+    group: ADMIN_TECHNICAL_TOOLS
+    label_vi: "ĐTM, giấy phép môi trường, đăng ký môi trường"
+    suggested_R_range: [2, 4]
+    keywords: ["đánh giá tác động môi trường", "đtm", "báo cáo đtm", "giấy phép môi trường", "đăng ký môi trường", "thẩm định", "phê duyệt"]
+  monitoring_reporting:
+    group: ADMIN_TECHNICAL_TOOLS
+    label_vi: "Quan trắc, giám sát, báo cáo"
+    suggested_R_range: [1, 3]
+    keywords: ["quan trắc", "giám sát", "kiểm kê", "thống kê", "báo cáo", "công bố thông tin", "cơ sở dữ liệu môi trường"]
+  technical_standard_threshold:
+    group: ADMIN_TECHNICAL_TOOLS
+    label_vi: "Quy chuẩn, tiêu chuẩn, ngưỡng kỹ thuật"
+    suggested_R_range: [2, 4]
+    keywords: ["quy chuẩn", "tiêu chuẩn", "ngưỡng", "hạn ngạch", "hạn mức", "khả năng chịu tải", "không vượt quá", "đạt quy chuẩn"]
+  planning_state_management:
+    group: STATE_ADMIN_PLANNING
+    label_vi: "Quản lý nhà nước, quy hoạch, kế hoạch"
+    suggested_R_range: [2, 4]
+    keywords: ["quy hoạch", "kế hoạch", "chương trình", "trách nhiệm quản lý", "chính phủ", "bộ", "ủy ban nhân dân", "ubnd"]
+  general_environment:
+    group: STATE_ADMIN_PLANNING
+    label_vi: "Bảo vệ môi trường chung"
+    suggested_R_range: [2, 3]
+    keywords: ["bảo vệ môi trường", "nguyên tắc bảo vệ môi trường", "công trình bảo vệ môi trường"]
+  biodiversity_natural_heritage:
+    group: CONSERVATION_ECONOMICS_CLIMATE
+    label_vi: "Đa dạng sinh học, di sản thiên nhiên"
+    suggested_R_range: [4, 5]
+    keywords: ["đa dạng sinh học", "di sản thiên nhiên", "hệ sinh thái", "loài", "sinh vật", "bảo tồn thiên nhiên"]
+  environmental_finance:
+    group: CONSERVATION_ECONOMICS_CLIMATE
+    label_vi: "Công cụ tài chính môi trường"
+    suggested_R_range: [2, 4]
+    keywords: ["phí bảo vệ môi trường", "quỹ bảo vệ môi trường", "ký quỹ", "bồi thường", "chi trả", "đóng góp tài chính"]
+  climate_carbon:
+    group: CONSERVATION_ECONOMICS_CLIMATE
+    label_vi: "Khí hậu, các-bon, tầng ô-dôn"
+    suggested_R_range: [4, 5]
+    keywords: ["biến đổi khí hậu", "khí nhà kính", "giảm phát thải", "hạn ngạch phát thải", "tín chỉ các-bon", "tín chỉ carbon", "thị trường các-bon", "tầng ô-dôn"]
+  circular_economy:
+    group: CONSERVATION_ECONOMICS_CLIMATE
+    label_vi: "Kinh tế tuần hoàn"
+    suggested_R_range: [2, 4]
+    keywords: ["kinh tế tuần hoàn", "tái chế", "tái sử dụng", "epr", "trách nhiệm mở rộng của nhà sản xuất"]
+
+domain_priority:
+  - hazardous_substances
+  - water
+  - air_noise_radiation
+  - climate_carbon
+  - biodiversity_natural_heritage
+  - waste
+  - pollution_control_remediation
+  - environmental_finance
+  - circular_economy
+  - eia_permit_registration
+  - monitoring_reporting
+  - technical_standard_threshold
+  - planning_state_management
+  - general_environment
+
+content_domains: [hazardous_substances, water, air_noise_radiation, climate_carbon, biodiversity_natural_heritage, waste, pollution_control_remediation, environmental_finance, circular_economy]
+tool_domains: [eia_permit_registration, monitoring_reporting, technical_standard_threshold, planning_state_management]
+high_risk_domains: [climate_carbon, biodiversity_natural_heritage, hazardous_substances]
